@@ -22,6 +22,8 @@ Here’s a README tailored for your **Expense Tracker CLI App**:
 
 The **Expense Tracker CLI App** is a command-line tool that allows users to manage their personal expenses. You can easily add, update, delete, and list expenses directly from your terminal, as well as summarize expenses by month or in total. This simple, yet powerful, CLI application is built using Node.js and the Commander.js library, with data stored in a JSON file.
 
+I found this project idea from https://roadmap.sh/projects/expense-tracker
+
 ## ⚙️ Tech Stack
 
 - **Node.js**: Back-end runtime environment
