@@ -84,32 +84,32 @@ To use the Expense Tracker CLI, run the following commands:
 
 - **Add an expense**:
   ```bash
-  node app.js add --description "Lunch" --amount 12.50
+  node index.js add --description "Lunch" --amount 12.50
   ```
 
 - **List all expenses**:
   ```bash
-  node app.js list
+  node index.js list
   ```
 
 - **Update an expense**:
   ```bash
-  node app.js update --id 1 --description "Dinner" --amount 15.75
+  node index.js update --id 1 --description "Dinner" --amount 15.75
   ```
 
 - **Delete an expense**:
   ```bash
-  node app.js delete --id 1
+  node index.js delete --id 1
   ```
 
 - **Summarize all expenses**:
   ```bash
-  node app.js summarize
+  node index.js summarize
   ```
 
 - **Summarize expenses for a specific month**:
   ```bash
-  node app.js summarize-month --month 9
+  node index.js summarize-month --month 9
   ```
 
 Enjoy tracking your expenses with the **Expense Tracker CLI App**!
