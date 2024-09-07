@@ -16,5 +16,17 @@
     "description": "Game",
     "amount": 450,
     "date": "2024-09-06"
+  },
+  {
+    "id": 4,
+    "amount": 400,
+    "date": "2024-09-07",
+    "description": "GTA 4"
+  },
+  {
+    "id": 5,
+    "description": "GTA 5",
+    "amount": 500,
+    "date": "2024-09-07"
   }
 ]

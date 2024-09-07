@@ -2,7 +2,8 @@ const { program } = require("commander");
 const fs = require("fs");
 const FILE_PATH = "./expenses.json";
 const path = "./expenses.json"; // Path to your expenses file
-
+const Table = require("cli-table");
+const chalk = require("chalk");
 function updateExpense(id, newDescription, newAmount) {
   const expenses = JSON.parse(fs.readFileSync(path, "utf8"));
 
@@ -25,12 +26,33 @@ function updateExpense(id, newDescription, newAmount) {
   fs.writeFileSync(path, JSON.stringify(expenses, null, 2));
   console.log(`Expense (ID: ${id}) updated successfully.`);
 }
-
-//Function to read expense file
+//Function for summarizing all expenses
+function summarizeExpenses() {
+  const expenses = readExpenses();
+  const total = expenses.reduce((acc, exp) => acc + exp.amount, 0);
+  console.log(`Total expenses: $${total}`);
+}
+//function to summarize expenses based on month given
+function summarizeExpensesByMonth(month) {
+  const expenses = readExpenses();
+  const filteredExpenses = expenses.filter((exp) => {
+    const expenseDate = new Date(exp.date);
+    return expenseDate.getMonth() + 1 === parseInt(month);
+  });
+  const total = filteredExpenses.reduce((acc, exp) => acc + exp.amount, 0);
+  console.log(`Total expenses for month ${month}: $${total}`);
+}
+/**
+ * Reads the expense file and returns the contents as an array of objects.
+ * @returns {Array<Object>} The array of expense objects.
+ */
 const readExpenses = () => {
+  // If the file does not exist, return an empty array.
   if (!fs.existsSync(FILE_PATH)) {
     return [];
   }
+
+  // Read the file and convert the string to a JSON object.
   const data = fs.readFileSync(FILE_PATH);
   return JSON.parse(data);
 };
@@ -86,12 +108,48 @@ program
   .description("Shows the list of expenses")
   .action(() => {
     const expenses = readExpenses();
-    console.log("ID  Date       Description  Amount");
-    expenses.forEach((exp) => {
-      console.log(
-        `${exp.id}  ${exp.date}   ${exp.description}         ${exp.amount}`
-      );
+    const table = new Table({
+      head: [
+        chalk.cyan("ID"),
+        chalk.cyan("Date"),
+        chalk.cyan("Description"),
+        chalk.cyan("Amount"),
+      ],
+      colWidths: [5, 20, 30, 10],
     });
+
+    expenses.forEach((exp) => {
+      table.push([
+        chalk.yellow(exp.id.toString().padStart(5, "")),
+        chalk.green(exp.date),
+        chalk.blue(exp.description),
+        chalk.red(`$${exp.amount.toFixed(2)}`),
+      ]);
+    });
+
+    console.log(table.toString());
   });
+//Summarizing command
+program
+  .command("summarize")
+  .description("Summarizes all expenses")
+  .action(() => {
+    summarizeExpenses();
+  });
+//command for summary of expenses of particular month given
+program
+  .command("summarize-month")
+  .description("Summarizes expenses for a specific month")
+  .option("--month <month>", "Month (1-12)")
+  .action((options) => {
+    summarizeExpensesByMonth(options.month);
+  });
+
+// Handle unknown commands
+program.on("command:*", () => {
+  console.error(`Invalid command: ${program.args.join(" ")}`);
+  program.help();
+});
+
 // Parse the input arguments
 program.parse(process.argv);
